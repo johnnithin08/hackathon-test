@@ -111,7 +111,7 @@ exports.local_branch_transfer = (req,res,next) => {
 }
 
 exports.get_local_bank_transfer = (req,res,next) => {
-    LocalBankTransactionData.find()
+    Local_Bank_Data.find()
     .then(data => {
         console.log("data : " , data)
         res.status(200).send(data)
@@ -131,6 +131,7 @@ exports.local_bank_transfer = async (req,res,next) => {
     try
      {
         let resp = await localbanktransactiondata.save()
+        res.send(resp)
      }
     catch(error) 
     {

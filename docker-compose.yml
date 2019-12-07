@@ -21,9 +21,20 @@ services:
         volumes:
             - "./mongo/data:/data/db"
         ports:
-          - "27017:27017"
+          - "27018:27018"
         expose: 
-            - "27017"
+            - "27018"
+
+    mongo-express:
+        container_name: mongoUI
+        image: mongo-express
+        restart: always
+        ports:
+          - 8081:8081
+        depends_on: 
+          - mongodb
+        environment: 
+          ME_CONFIG_MONGODB_SERVER: mongodb
 
 
     #*******************************************Sawtooth*************************************************#
