@@ -1,0 +1,72 @@
+version: '2.0'
+
+services:
+    
+    api:
+        container_name: api
+        image: api
+        build: ./api
+        restart: always
+        ports:
+          - "8000:8000"
+        volumes:
+          - "./api/src:/usr/share/workdir/api/src"
+        command: bash -c "npm run app"
+        depends_on:
+          - "mongodb"
+
+    mongodb:
+        container_name: mongodb
+        image: mongo
+        volumes:
+            - "./mongo/data:/data/db"
+        ports:
+          - "27017:27017"
+        expose: 
+            - "27017"
+
+
+    #*******************************************Sawtooth*************************************************#
+
+    sawtooth-rest-api:
+        container_name: rest-api
+        image: hyperledger/sawtooth-rest-api:1.0
+        expose:
+          - "8008"
+        depends_on:
+          - validator
+        entrypoint: |
+          sawtooth-rest-api -vvv
+            --connect tcp://validator:4004
+            --bind sawtooth-rest-api:8008
+
+    settings-tp:
+        container_name: settings
+        image: hyperledger/sawtooth-settings-tp:1.0
+        depends_on:
+            - validator
+        command: settings-tp -vv --connect tcp://validator:4004
+
+    validator:
+        container_name: validator
+        image: hyperledger/sawtooth-validator:1.0
+        expose:
+            - "4004"
+        volumes: 
+            - "./Blockchain/validator/data:/var/lib/sawtooth/"
+            - "./Blockchain/validator/userKey:/root/.sawtooth/keys/"
+            - "./Blockchain/validator/validatorKey:/etc/sawtooth/keys/"
+            - "./Blockchain/validator/policy:/etc/sawtooth/policy/"
+        command: |
+            bash -c "
+            if [ ! -f /etc/sawtooth/keys/validator.priv ]; then
+            sawadm keygen &&
+            sawtooth keygen my_key &&
+            sawset genesis -k /root/.sawtooth/keys/my_key.priv &&
+            sawadm genesis config-genesis.batch
+            fi;
+            sawtooth-validator -vvv \
+                --endpoint tcp://validator:8800 \
+                --bind component:tcp://eth0:4004 \
+                --bind network:tcp://eth0:8800
+            "

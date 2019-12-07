@@ -17,5 +17,7 @@ router.get('/local_bank_transfer',usercontroller.get_local_bank_transfer)
 
 router.post('/transfer_to_international_bank',usercontroller.local_bank_transfer)
 
+router.get('/test', (req,res) => res.send('Test'));
+
 
 module.exports = router;
