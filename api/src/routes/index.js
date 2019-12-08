@@ -8,7 +8,9 @@ const usercontroller = require('../controller/usercontroller')
 router.post('/signup',usercontroller.signup,(req,res)=>{
     res.send("HI")
 })
-
+router.get('/login',(req,res)=>{
+    res.render('login.ejs',{});
+})
 router.post('/login',usercontroller.login)
 
 router.post('/transfer_to_local_bank',usercontroller.local_branch_transfer)

@@ -5,6 +5,8 @@ const dotenv = require('dotenv/config');
 var path = require('path');
 
 const app = express();
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
 
 const IndexRoutes = require('./routes/index')
 
@@ -15,7 +17,7 @@ const IndexRoutes = require('./routes/index')
 // const uri = 'mongodb+srv://johnnithin08:nithinjohn@cluster0-juafa.mongodb.net/test?retryWrites=true&w=majority'
 const uri = "mongodb://mongodb:27017/patientdb";
 
-app.use(bodyparser.json());
+
 
 app.use(function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
