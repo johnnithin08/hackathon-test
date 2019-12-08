@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+</head>
+<body>
+<% include partials/nav %>
+<div class="container-fluid bg-3 text-center">    
+  <!--  
+  <div class="row">
+      <div class="col-sm-2" style="background-color:rgb(248, 248, 241);">
+        <div class="sidenav">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+              aria-expanded="false">Fruits</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item">Banana</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Mango</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Jackfruit</a>
+              
+            </div>
+            <br>
+
+
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+              aria-expanded="false">Vegetables</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item">X</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Y</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Z</a>  
+            </div><br>
+  
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+              aria-expanded="false">Cereals</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item">X</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Y</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Y</a>  
+            </div><br>  
+        </div>
+    </div>  
+
+      <div class="col-sm-10">                      
+            <div class="row">
+              <% for(var j=0; j<result.length; j++) { %>
+                <div class="col-md-3">
+                  <div class="thumbnail">
+                    <a href="images/Nenthran.jpeg">
+                      <img src="images/Nenthran.jpeg" alt="Lights" style="width:50%">
+                      <div class="caption">
+                        <a class="link" href="/crop/farm/<%=result[j].id %>"> <%= result[j].crop_name %> is <%= result[j].crop_variety %> </a> &nbsp &nbsp &nbsp &nbsp &nbsp                     
+                        <a class="link" href="/crop/history/<%=result[j].id %>"> View </a>
+                      </div>   
+                    </a>
+                  </div>
+                </div>               
+                <%  } %>
+              </div>                       
+      </div>
+  </div>  -->
+  </div>  
+  
+  <div>
+    <% include partials/footer %>
+  </body>
+  </div>
+
+<% include partials/script %>
+</html>

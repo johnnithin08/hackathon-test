@@ -2,11 +2,15 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv/config');
+var path = require('path');
+
+const app = express();
 
 const IndexRoutes = require('./routes/index')
 
+ app.set('views', path.join(__dirname, 'views'));
+ app.set('view engine', 'ejs');
 
-const app = express();
 
 // const uri = 'mongodb+srv://johnnithin08:nithinjohn@cluster0-juafa.mongodb.net/test?retryWrites=true&w=majority'
 const uri = "mongodb://mongodb:27017/patientdb";

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+  </head>
+
+  <body>
+    <!-- Navbar Begins -->
+    
+    <!-- Navbar Ends -->
+
+    <!-- Form Begins -->
+    <form method="POST" onsubmit="return validateForm()">
+      <div class="container">
+        <div class="row mt-5">
+          <div id="form-layout" class="col-6 mx-auto">
+            <div class="row mt-4">
+              <div class="col-12">
+                <h4 class="text-center">User Login</h4>
+                <hr />
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-6 mx-auto">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="c_username"
+                  id="c_username"
+                  placeholder="email@address.com"
+                />
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-6 mx-auto">
+                <input
+                  class="form-control"
+                  type="password"
+                  name="c_password"
+                  id="c_password"
+                  placeholder="Password"
+                />
+              </div>
+            </div>
+            <div class="row mt-4 mb-4">
+              <div class="col-4 mx-auto">
+                <input
+                  class="btn btn-block btn-success"
+                  type="submit"
+                  value="Login"
+                />
+              </div>
+            </div>
+            <div class="float-left">
+              <div class="col-4 mx-auto">
+                <a
+                  href="/resetPassword"
+                  class="btn btn-sm btn-link"
+                  role="button"
+                  >Forgot Password?</a
+                >
+              </div>
+            </div>
+            <div class="row float-right">
+              <div class="col-4 mx-auto">
+                <a
+                  href="/registration"
+                  class="btn btn-sm float-right btn-link"
+                  role="button"
+                  >New User? Signup Here!</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- form ends -->
+
+    
+  </body>
+</html>
