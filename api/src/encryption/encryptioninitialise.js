@@ -55,7 +55,7 @@ exports.Postdata = async (data) => {
         console.log(data);    
         if(resp.ok){
             console.log(data);
-            let response = JSON.parse({ message: "data recieved", data: encryp, privatekey: privateKey })
+            let response = { message: "data recieved", data: encryp, privatekey: privateKey }
             return response;
         }
         else{
@@ -64,7 +64,7 @@ exports.Postdata = async (data) => {
     }
     catch (error) {
         console.log("error in fetch", error);
-        let errorresponse = JSON.parse({ message: "Internal server error", id: "ehrEr001"})
+        let errorresponse = { message: "Internal server error", id: "ehrEr001"}
         return errorresponse;
        
     }
@@ -74,24 +74,28 @@ exports.Postdata = async (data) => {
 
 
 exports.getDataById = async (req, res, next) => {
-    let hnID = req.params.hnId;
-    console.log("id is : " + hnID)
+    // let hnID = req.params.hnId;
+    // console.log("id is : " + hnID)
 
     try {
-        let doc = await Decryps.findById({ _id: hnID });
-        ;
-        var geturl = 'http://sawtooth-client:3000/dataout/' + doc.privk
-        let response = await fetch(geturl, {
-            method: 'GET',
-        })
-        let responseJson = await response.json();
-        console.log(`response -> ${responseJson}`);
+        // let doc = await Decryps.findById({ _id: hnID });
+        // ;
+        // var geturl = 'http://sawtooth-client:3000/dataout/' + doc.privk
+        // let response = await fetch(geturl, {
+        //     method: 'GET',
+        // })
+        // let responseJson = await response.json();
+        // console.log(`response -> ${responseJson}`);
+        let encdata = req.body.data;
+        let iv = req.body.iv;
+        let key = req.body.key;
+        let tag = req.body.tag;
 
         let dec = new Enc_Dec();
-        let data = dec.decrypt(responseJson.data, doc.IV, doc.Key, doc.tag)
+        let data = dec.decrypt(encdata, iv, key,tag)
         res.status(200).json({ data: data, message: "worked" });
     }
     catch (err) {
-        logger.error(err);
+        console.log(err);
     }
 }

@@ -97,7 +97,7 @@ exports.local_branch_transfer = async (req,res,next) => {
                 transfer : transfer,
                 transaction : transaction
             }
-            res.status(200).send(resp)
+            res.send(resp)
         }) 
         .catch(error => {
         console.log(error)

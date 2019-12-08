@@ -6,7 +6,7 @@ const { Secp256k1PrivateKey } = require('sawtooth-sdk/signing/secp256k1');
 const { TextEncoder, TextDecoder } = require('text-encoding/lib/encoding');
 const amqp = require('amqplib/callback_api');
 
-FAMILY_NAME = 'ehrecords'
+FAMILY_NAME = 'banktransfer'
 const hexKey = createHash('sha512').update('ehr').digest('hex').substr(64);
 const bkey = Secp256k1PrivateKey.fromHex(hexKey);
 const bcontext = createContext('secp256k1');
@@ -31,7 +31,7 @@ class BankClient {
   }
 
   get_address(publicKey) {
-    var Address = hash("ehrecords").substr(0, 6) + hash(publicKey).substr(0, 64);
+    var Address = hash("banktransfer").substr(0, 6) + hash(publicKey).substr(0, 64);
     return Address
   }
 
@@ -46,7 +46,8 @@ class BankClient {
     var encode = new TextEncoder('utf8');
     const payloadBytes = encode.encode(payload)
     const transactionHeaderBytes = protobuf.TransactionHeader.encode({
-      familyName: 'ehrecords',
+      familyName: 'banktransfer',
+      familyVersion : "1.0",
       inputs: inputAddressList,
       outputs: outputAddressList,
       signerPublicKey: this.signer.getPublicKey().asHex(),

@@ -6,7 +6,7 @@ const crypto = require('crypto');
 var enc = new TextEncoder('utf8')
 var dec = new TextDecoder('utf8')
 
-FAMILY_NAME='ehrecords';
+FAMILY_NAME='banktransfer';
 const NAMESPACE = hash(FAMILY_NAME).substring(0, 6);
 
 function hash(pk) {

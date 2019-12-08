@@ -25,7 +25,7 @@ class Encrypt {
     return encrypted.toString('hex')+":"+ IV.toString('hex')+":"+key.toString('hex')+":"+ hmac.digest('hex') ;
    }
    
- decrypt(text,iv,Key,hmac,) {
+ decrypt(text,iv,Key,hmac) {
     let encryptedText = Buffer.from(text, 'hex');
     let IV = Buffer.from(iv,'hex');
     let key = Buffer.from(Key,'hex');
@@ -47,6 +47,8 @@ class Encrypt {
     let decipher = crypto.createDecipheriv(ALGORITHM,key, IV);
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);
+    console.log("decrypted data:",decrypted)
+    console.log("decrypted json",JSON.parse(decrypted))
     return decrypted.toString();
    }
 
