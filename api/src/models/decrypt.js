@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const DecSchema = mongoose.Schema({
-    _id:{
-        type:String,
-        required:true
-    },
     IV: {
         type:String,
         required:true

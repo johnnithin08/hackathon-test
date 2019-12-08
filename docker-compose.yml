@@ -3,12 +3,12 @@ version: '2.0'
 services:
     
     api:
-        container_name: api
+        container_name: api2
         image: api
         build: ./api
         restart: always
         ports:
-          - "8000:8000"
+          - "8001:8000"
         volumes:
           - "./api/src:/usr/share/workdir/api/src"
         command: bash -c "npm run app"
@@ -21,9 +21,9 @@ services:
         volumes:
             - "./mongo/data:/data/db"
         ports:
-          - "27018:27018"
+          - "27017:27017"
         expose: 
-            - "27018"
+            - "27017"
 
     mongo-express:
         container_name: mongoUI
@@ -35,6 +35,33 @@ services:
           - mongodb
         environment: 
           ME_CONFIG_MONGODB_SERVER: mongodb
+
+    sawtooth-TP:
+        container_name: sawtooth-tp
+        image: sawtooth-tp
+        build: ./Blockchain/processor
+        ports:
+          - "9000:9000"
+        volumes:
+          - "./Blockchain/processor/src:/usr/share/workdir/processor/src"
+        command: bash -c "npm run start"
+        depends_on:
+          - "sawtooth-rest-api"
+          - "settings-tp"
+          - "validator"
+
+    sawtooth-client:
+      container_name: sawtooth-client
+      image: sawtooth-client
+      build: ./Blockchain/client
+      ports:
+        - "3000:3000"
+      volumes:
+        - "./Blockchain/client/src:/usr/share/workdir/client/src"
+      command: bash -c "node src/app.js"
+      depends_on:
+        - "validator"
+        - "sawtooth-TP"
 
 
     #*******************************************Sawtooth*************************************************#
@@ -50,6 +77,8 @@ services:
           sawtooth-rest-api -vvv
             --connect tcp://validator:4004
             --bind sawtooth-rest-api:8008
+        ports:
+          - "8008:8008"
 
     settings-tp:
         container_name: settings

@@ -3,8 +3,7 @@ const fetch = require('node-fetch');
 const { createContext, CryptoFactory } = require('sawtooth-sdk/signing')
 
 
-
-const Enc_Dec = require('../encryption/encrypt');
+const encrypt = require('../encryption/encryptioninitialise')
 const Usersignup = require('../models/user')
 const Local_Branch_Data = require('../models/Local_Branch')
 const Local_Bank_Data = require('../models/Local_Bank')
@@ -69,7 +68,7 @@ exports.login = (req,res,next) => {
 }
 
 
-exports.local_branch_transfer = (req,res,next) => {
+exports.local_branch_transfer = async (req,res,next) => {
     let transferID = uuid.v1();
     let transactionID = uuid.v1();
     let amount = req.body.amount;
@@ -80,6 +79,7 @@ exports.local_branch_transfer = (req,res,next) => {
         amount : amount,
         time : time
     })
+    let resp = await encrypt.Postdata(transferdata)
     transferdata
     .save()
     .then(transfer => {
@@ -131,13 +131,12 @@ exports.local_bank_transfer = async (req,res,next) => {
     try
      {
         let resp = await localbanktransactiondata.save()
-        res.send(resp)
      }
     catch(error) 
     {
     console.log(error)
     }
-    
+    await encrypt(data)
     
 }
 
