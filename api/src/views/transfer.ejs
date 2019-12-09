@@ -10,26 +10,26 @@
     <!-- Navbar Ends -->
 
     <!-- Form Begins -->
-    <form name="loginForm" method="post" action="login()">
+    <form name="loginForm" method="post" action="transfer_to_local_bank">
       <table width="20%" bgcolor="0099CC" align="center">
       
       <tr>
-      <td colspan=2><center><font size=4><b>HTML Login Page</b></font></center></td>
+      <td colspan=2><center><font size=4><b>Transfer Forum</b></font></center></td>
       </tr>
       
       <tr>
       <td>Amount</td>
-      <td><input type="text" size=25 name="Amount" id="amt"></td>
+      <td><input type="text" size=25 name="amount" id="amt"></td>
       </tr>
       
       <tr>
       <td>Branch Code</td>
-      <td><input type="text" size=25 name="pwd" id="pwd"></td>
+      <td><input type="text" size=25 name="code" id="branchcode"></td>
       </tr>
       
       <tr>
       <td ><input type="Reset"></td>
-      <td><input type="submit" onclick="login()" value="Login()"></td>
+      <td><input type="submit" onclick="return local_branch_transfer()" value="submit"></td>
       </tr>
       
       </table>

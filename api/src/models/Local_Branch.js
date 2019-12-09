@@ -6,6 +6,10 @@ const transferSchema = mongoose.Schema({
         unique: true,
         required: true
       },
+      branchcode: {
+            type: String,
+            required: true
+          },
       transactionID: {
             type: String,
             unique: true,

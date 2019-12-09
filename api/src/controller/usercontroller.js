@@ -50,14 +50,12 @@ exports.login = (req,res,next) => {
     //res.render('../src/views/login.ejs',{});
     let userID = req.body.userid;
     let password = req.body.pwd;
-    console.log(userID);
-    console.log(password);
     Usersignup.findOne({ userID : userID})
     .then(data => {
-        console.log("data" , data)
+        //console.log("data" , data)
         if(data.password == password)
          { 
-             res.status(200).send("Logged in");
+             res.render('transfer.ejs',{});
          }
         else
          {
@@ -74,11 +72,14 @@ exports.local_branch_transfer = async (req,res,next) => {
     let transferID = uuid.v1();
     let transactionID = uuid.v1();
     let amount = req.body.amount;
+    let branchcode = req.body.code;
     let time = Date.now();
+    console.log(amount);
     let transferdata = new Local_Branch_Data({
         transferID : transferID,
         transactionID : transactionID,
         amount : amount,
+        branchcode : branchcode,
         time : time
     })
     let resp = await encrypt.Postdata(transferdata)
