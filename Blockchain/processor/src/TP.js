@@ -6,6 +6,8 @@ const crypto = require('crypto');
 var enc = new TextEncoder('utf8')
 var dec = new TextDecoder('utf8')
 
+const GRIC= "GER678910"
+const Bank_Code = 678910
 FAMILY_NAME='banktransfer';
 const NAMESPACE = hash(FAMILY_NAME).substring(0, 6);
 
@@ -27,11 +29,11 @@ class BankHandler extends TransactionHandler{
     }
 
     async apply(transactionProcessRequest, context){
-        console.log("*********************************Transaction process request*******************",transactionProcessRequest,"*****************************************")
         var msg = dec.decode(transactionProcessRequest.payload);
         let header = transactionProcessRequest.header;
         this.publicKey = header.signerPublicKey
-        this.address = hash(FAMILY_NAME).substr(0, 6) + hash(this.publicKey).substr(0, 64);
+        this.address = hash(FAMILY_NAME).substr(0, 6) + hash(GRIC).substr(0, 64);
+        console.log("Address : ",this.address)
         console.log();
         msg = JSON.parse(msg);
         console.log("msg ---> ",`{ msg:${msg.action}, payload:${msg.payload} }`);

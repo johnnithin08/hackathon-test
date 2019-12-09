@@ -8,7 +8,7 @@ const Decryps = require('../models/decrypt')
 
 
 
-exports.Postdata = async (data) => {
+exports.Postdata = async (data,identifiers) => {
     let enc = new Enc_Dec();
 
     const context = createContext('secp256k1')
@@ -39,6 +39,7 @@ exports.Postdata = async (data) => {
     try {
         const payload = {
             action: "data-store",
+            identifiers : identifiers,
             payload: encryp
         }
         const resp = await fetch('http://sawtooth-client:3000/send_data_to_sawtooth', {
@@ -64,7 +65,7 @@ exports.Postdata = async (data) => {
     }
     catch (error) {
         console.log("error in fetch", error);
-        let errorresponse = { message: "Internal server error", id: "ehrEr001"}
+        let errorresponse = { message: "Internal server error"}
         return errorresponse;
        
     }
@@ -91,6 +92,21 @@ exports.getDataById = async (req, res, next) => {
         let key = req.body.key;
         let tag = req.body.tag;
 
+        let dec = new Enc_Dec();
+        let data = dec.decrypt(encdata, iv, key,tag)
+        res.status(200).json({ data: data, message: "worked" });
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+exports.getdecodeddata = async(data) => {
+    let encdata = data;
+    try {
+        let iv = req.body.iv;
+        let key = req.body.key;
+        let tag = req.body.tag;
         let dec = new Enc_Dec();
         let data = dec.decrypt(encdata, iv, key,tag)
         res.status(200).json({ data: data, message: "worked" });

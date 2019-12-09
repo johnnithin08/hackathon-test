@@ -5,6 +5,14 @@ const transactionSchema = mongoose.Schema({
             type: String,
             required: true
       },
+      branchcode: {
+            type : Number,
+            required : true
+      },
+      status : {
+            type : String,
+            required : true
+      },
       amount: {
             type: Number,
             required: true

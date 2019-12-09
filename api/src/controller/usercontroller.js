@@ -71,6 +71,7 @@ exports.login = (req,res,next) => {
 exports.local_branch_transfer = async (req,res,next) => {
     let transferID = uuid.v1();
     let transactionID = uuid.v1();
+    let branchcode = 12345;
     let amount = req.body.amount;
     let time = Date.now();
     let transferdata = new Local_Branch_Data({
@@ -79,13 +80,14 @@ exports.local_branch_transfer = async (req,res,next) => {
         amount : amount,
         time : time
     })
-    let resp = await encrypt.Postdata(transferdata)
     transferdata
     .save()
     .then(transfer => {
         console.log("Data added to local branch")
         let localbanktransactiondata = new Local_Bank_Data({
             transactionID : transactionID,
+            branchcode : branchcode,
+            status : 'Submitted',
             amount : amount,
             time : time
         })
@@ -102,7 +104,6 @@ exports.local_branch_transfer = async (req,res,next) => {
         .catch(error => {
         console.log(error)
         })
-        res.status(200).send(transfer)
     }) 
     .catch(error => {
     console.log(error)
@@ -111,7 +112,7 @@ exports.local_branch_transfer = async (req,res,next) => {
 }
 
 exports.get_local_bank_transfer = (req,res,next) => {
-    Local_Bank_Data.find()
+    Local_Bank_Data.find({ "status" : "Submitted"})
     .then(data => {
         console.log("data : " , data)
         res.status(200).send(data)
@@ -121,22 +122,33 @@ exports.local_bank_transfer = async (req,res,next) => {
     let transactionID = req.body.transactionID
     let amount = req.body.amount;
     let time = req.body.time;
+    let branchcode = req.body.branchcode
+    let GRICcode = req.body.GRICcode
     let reconcileID = uuid.v1()
-    let localbanktransactiondata = new International_Bank_Data({
+    let transferdata = {
         ReconcileID : reconcileID,
         transactionID : transactionID,
+        branchcode : branchcode,
+        GRICcode : GRICcode,
         amount : amount,
         time : time
-    })
-    try
-     {
-        let resp = await localbanktransactiondata.save()
-     }
-    catch(error) 
-    {
-    console.log(error)
     }
-    await encrypt(data)
+    let identifiers = {
+        from_GRIC : "IN12345",
+        from_branch_code : "12345",
+        to_GRIC : "GER678910",
+        to_branch_code : 678910
+    }
+    let resp = await encrypt.Postdata(transferdata,identifiers)
+    // let localbanktransactiondata = new International_Bank_Data({
+    //     ReconcileID : reconcileID,
+    //     transactionID : transactionID,
+    //     branchcode : branchcode,
+    //     country : country,
+    //     amount : amount,
+    //     time : time
+    // })
+    
     
 }
 

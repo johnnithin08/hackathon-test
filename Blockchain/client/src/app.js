@@ -13,7 +13,6 @@ app.use(bodyparser.json());
 
 
 const posting = async (req, res, next) => {
-    // console.log("sawclient post enter", req.body);
     let key = req.body.key;
     let payload = req.body.payload;
     try {
@@ -22,9 +21,8 @@ const posting = async (req, res, next) => {
         res.status(202).json({ message: "data succesfully send to Blockchain" });
     }
     catch (e) {
-        res.status(500).json({ message: "Internal server error", id: "ehrEr002"});
-        // console.log(e.message);
-        // console.log("the problem is --->", e);
+        res.status(500).json({ message: "Internal server error"});
+
     }
 
 }

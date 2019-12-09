@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const DecSchema = mongoose.Schema({
+    transactionID : {
+        type : String,
+        required : true
+    },
     IV: {
         type:String,
         required:true

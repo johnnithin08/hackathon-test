@@ -37,7 +37,7 @@ class BankClient {
 
   async send_data(values) {
     var payload = ''
-    var address = this.address;
+    var address = hash(FAMILY_NAME).substr(0,6);
     console.log("output " + address)
     var inputAddressList = [address];
     var outputAddressList = [address];
