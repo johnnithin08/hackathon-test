@@ -9,8 +9,15 @@ const encrypt = require('../encryption/encryptioninitialise')
 router.post('/signup',usercontroller.signup,(req,res)=>{
     res.send("HI")
 })
+<<<<<<< HEAD
 
 router.post('/local_branch_login',usercontroller.login)
+=======
+router.get('/login',(req,res)=>{
+    res.render('login.ejs',{});
+})
+router.post('/login',usercontroller.login)
+>>>>>>> 666f9ce5651fb8c76cd8cc82831aa8791d8c8a5a
 
 router.post('/local_branch_login/transfer_to_local_bank',usercontroller.local_branch_transfer)
 
