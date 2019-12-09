@@ -47,15 +47,17 @@ exports.signup = (req,res,next) => {
 
 
 exports.login = (req,res,next) => {
-    let userID = req.body.userID;
-    let password = req.body.password;
-    console.log("here")
+    //res.render('../src/views/login.ejs',{});
+    let userID = req.body.userid;
+    let password = req.body.pwd;
+    console.log(userID);
+    console.log(password);
     Usersignup.findOne({ userID : userID})
     .then(data => {
         console.log("data" , data)
         if(data.password == password)
          { 
-             res.status(200).send("Logged in")
+             res.status(200).send("Logged in");
          }
         else
          {
