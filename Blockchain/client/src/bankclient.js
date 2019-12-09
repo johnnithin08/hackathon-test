@@ -7,6 +7,8 @@ const { TextEncoder, TextDecoder } = require('text-encoding/lib/encoding');
 const amqp = require('amqplib/callback_api');
 
 FAMILY_NAME = 'banktransfer'
+branchcode = '78910',
+GRICcode = 'GER78910'
 const hexKey = createHash('sha512').update('ehr').digest('hex').substr(64);
 const bkey = Secp256k1PrivateKey.fromHex(hexKey);
 const bcontext = createContext('secp256k1');
@@ -122,7 +124,34 @@ class BankClient {
     }
 
   }
+
+async getState (address, isQuery) {
+    let stateRequest = 'http://rest-api:8008/state';
+    if(address) {
+      if(isQuery) {
+        stateRequest += ('?address=')
+      } else {
+        stateRequest += ('/address/');
+      }
+      stateRequest += address;
+    }
+    let stateResponse = await fetch(stateRequest);
+    let stateJSON = await stateResponse.json();
+    return stateJSON;
+  }
+
+
+async getTransferListings() 
+  {
+    const publicKey = this.signer.getPublicKey().asHex();
+    let orderListingAddress;
+    orderListingAddress = hash(FAMILY_NAME).substr(0, 6) +  hash(GRICcode).substr(0,20)+ hash(branchcode).substr(0,20);
+    return this.getState(orderListingAddress, true);
+}
+  
+
 };
+
 
 
 

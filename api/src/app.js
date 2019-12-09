@@ -15,7 +15,7 @@ const IndexRoutes = require('./routes/index')
 
 
 // const uri = 'mongodb+srv://johnnithin08:nithinjohn@cluster0-juafa.mongodb.net/test?retryWrites=true&w=majority'
-const uri = "mongodb://mongodb:27017/patientdb";
+const uri = "mongodb://mongodb:27017/transferdb";
 
 
 

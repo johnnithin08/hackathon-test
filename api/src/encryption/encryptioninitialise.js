@@ -18,7 +18,9 @@ exports.Postdata = async (data,identifiers) => {
     let stringdata= JSON.stringify(data)
     let cipherData = enc.encrypt(stringdata);
     let ciphers = cipherData.split(":");
+    console.log("Decrypt data stored to db")
     const decryps = new Decryps({
+        transactionID : data.transactionID,
         IV: ciphers[1],
         Key: ciphers[2],
         tag: ciphers[3],
@@ -27,7 +29,7 @@ exports.Postdata = async (data,identifiers) => {
     decryps
         .save()
         .then(data => {
-            console.log("data added");
+            console.log("Decrypt data : ", data);
         })
         .catch(err => {
             console.log(err.message);

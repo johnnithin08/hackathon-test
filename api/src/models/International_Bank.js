@@ -10,6 +10,10 @@ const transactionReconcileSchema = mongoose.Schema({
             unique: true,
             required: true
       },
+      branchcode : {
+            type : String,
+            required : true
+      },
       amount: {
             type: Number,
             required: true

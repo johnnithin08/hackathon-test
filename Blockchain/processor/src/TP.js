@@ -32,15 +32,19 @@ class BankHandler extends TransactionHandler{
         var msg = dec.decode(transactionProcessRequest.payload);
         let header = transactionProcessRequest.header;
         this.publicKey = header.signerPublicKey
-        this.address = hash(FAMILY_NAME).substr(0, 6) + hash(GRIC).substr(0, 64);
-        console.log("Address : ",this.address)
-        console.log();
         msg = JSON.parse(msg);
+        let stringmsg = JSON.stringify(msg)
+        let localaddress = hash(FAMILY_NAME).substr(0, 6) + hash(msg.identifiers.from_GRIC).substr(0,20) + hash(msg.identifiers.from_branch_code).substr(0,20) + hash(stringmsg).substr(0, 24);
+        let internationaladdress = hash(FAMILY_NAME).substr(0, 6) + hash(msg.identifiers.to_GRIC).substr(0,20) + hash(msg.identifiers.to_branch_code.toString()).substr(0,20) + hash(stringmsg).substr(0, 24)
+        console.log("Address : ",localaddress)
+        console.log();
+        console.log("parsed msg",msg)
         console.log("msg ---> ",`{ msg:${msg.action}, payload:${msg.payload} }`);
         console.log();
         if( msg.action === "data-store"){
             try{
-                const trList = await writeToStore(context, this.address, msg.payload);
+                const local_bank_state = await writeToStore(context, localaddress, msg.payload);
+                const international_bank_state = await writeToStore(context, internationaladdress, msg.payload);
                 // context.addEvent(`${FAMILY_NAME}/stored-data`, [['address', this.address]],"" );
                 return trList;
             }

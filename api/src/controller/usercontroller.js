@@ -48,8 +48,8 @@ exports.signup = (req,res,next) => {
 
 exports.login = (req,res,next) => {
     //res.render('../src/views/login.ejs',{});
-    let userID = req.body.userid;
-    let password = req.body.pwd;
+    let userID = req.body.userID;
+    let password = req.body.password;
     console.log(userID);
     console.log(password);
     Usersignup.findOne({ userID : userID})
@@ -142,15 +142,36 @@ exports.local_bank_transfer = async (req,res,next) => {
         to_branch_code : 678910
     }
     let resp = await encrypt.Postdata(transferdata,identifiers)
-    // let localbanktransactiondata = new International_Bank_Data({
-    //     ReconcileID : reconcileID,
-    //     transactionID : transactionID,
-    //     branchcode : branchcode,
-    //     country : country,
-    //     amount : amount,
-    //     time : time
-    // })
+    console.log("Usercontroller response : ",resp)
+    Local_Bank_Data.update({transactionID : transactionID},{ $set : { status : 'Forwarded to International Bank'}},(res) => {
+        console.log("Response from local bank : ",res)
+    })
+    
+    let localbanktransactiondata = new International_Bank_Data({
+        ReconcileID : reconcileID,
+        transactionID : transactionID,
+        branchcode : branchcode,
+        amount : amount,
+        time : time
+    })
+    localbanktransactiondata.save()
+    .then(data => {
+        console.log("Data added to  international db : ", data)
+    })
+    
     
     
 }
 
+exports.get_international_bank_transfer = async (req,res,next) => {
+    let geturl = 'http://sawtooth-client:3000/get_data_from_sawtooth' 
+    let response = await fetch(geturl, {
+        method: 'GET',
+    })
+    let responseJson = await response.json();
+    console.log(`response -> ${responseJson}`);
+
+    let dec = new Enc_Dec();
+    let data = dec.decrypt(responseJson.data, doc.IV, doc.Key, doc.tag)
+    res.status(200).json({ data: data, message: "worked" });
+}
