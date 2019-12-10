@@ -1,8 +1,8 @@
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost');
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
+  client.on('blockCommit', (msg) => {console.log(msg)}); //save the msg to var and use it to change UI
+  client.on('dataStored', (msg) => {console.log(msg)});
 </script>
+
