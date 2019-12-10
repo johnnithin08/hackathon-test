@@ -103,15 +103,16 @@ exports.getDataById = async (req, res, next) => {
     }
 }
 
-exports.getdecodeddata = async(data) => {
-    let encdata = data;
+exports.getdecodeddata = (data,iv,key,tag) => {
+    let datareceived = data
+    let ivreceived = iv
+    let keyreceived = key
+    let tagreceived = tag
     try {
-        let iv = req.body.iv;
-        let key = req.body.key;
-        let tag = req.body.tag;
         let dec = new Enc_Dec();
-        let data = dec.decrypt(encdata, iv, key,tag)
-        res.status(200).json({ data: data, message: "worked" });
+        let data = dec.decrypt(datareceived, ivreceived, keyreceived,tagreceived)
+        console.log("decrypted data : ",data)
+        return data;
     }
     catch (err) {
         console.log(err);

@@ -49,7 +49,7 @@ class Encrypt {
     decrypted = Buffer.concat([decrypted, decipher.final()]);
     console.log("decrypted data:",decrypted)
     console.log("decrypted json",JSON.parse(decrypted))
-    return decrypted.toString();
+    return JSON.parse(decrypted);
    }
 
 

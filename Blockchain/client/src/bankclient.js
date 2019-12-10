@@ -7,8 +7,8 @@ const { TextEncoder, TextDecoder } = require('text-encoding/lib/encoding');
 const amqp = require('amqplib/callback_api');
 
 FAMILY_NAME = 'banktransfer'
-branchcode = '78910',
-GRICcode = 'GER78910'
+branchcode = '678910',
+GRICcode = 'GER678910'
 const hexKey = createHash('sha512').update('ehr').digest('hex').substr(64);
 const bkey = Secp256k1PrivateKey.fromHex(hexKey);
 const bcontext = createContext('secp256k1');
@@ -137,7 +137,12 @@ async getState (address, isQuery) {
     }
     let stateResponse = await fetch(stateRequest);
     let stateJSON = await stateResponse.json();
-    return stateJSON;
+    console.log("stateJSON in client",stateJSON)
+    let data = stateJSON.data[0].data
+    console.log("data in client",data)
+    var datas = new Buffer(data, 'base64').toString();
+    console.log("datas in lcient : ",datas)
+    return datas;
   }
 
 

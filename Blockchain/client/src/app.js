@@ -36,7 +36,11 @@ const getting = async (req, res, next) => {
     let ehr = new client(privateKey);
     let data = await ehr.getTransferListings();
     console.log("transfer data : ",data)
-    res.status(200).json({ message: "encrypted text is received", data: data });
+    let returndata = {
+        message : "encrypted text received",
+        data: data
+    }
+    res.send({ message: "encrypted text is received", data: data });
 }
 
 

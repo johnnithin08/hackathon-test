@@ -175,19 +175,36 @@ exports.get_international_bank_transfers = async (req,res,next) => {
 
 
 exports.hq_transfer = async(req,res,next) => {
-    let geturl = 'http://sawtooth-client:3000/get_data_from_sawtooth' 
-    let response = await fetch(geturl, {
-        method: 'GET',
-    })
-    console.log("Data in usercontroller : ",res)
-    let responseJson = await response.json();
-    console.log(`response -> ${responseJson}`);
-    Decryps.find()
-    .then(international_data => {
-        console.log("Data from international db : ", data)
-        let dec = new Enc_Dec();
-        let data = dec.decrypt(response.data,international_data.iv,international_data.key,international_data.tag)
-        res.status(200).json({ data: data, message: "worked" });
-    })
+    try
+     {
+        let geturl = 'http://sawtooth-client:3000/get_data_from_sawtooth' 
+        let response = await fetch(geturl, {
+            method: 'GET',
+        })
+        if (response.ok) 
+        { 
+            let jsondata = await response.json();
+            console.log("Data in usercontroller : ",jsondata)
+            // console.log(`response -> ${responseJson}`);
+            Decryps.find()
+            .then(international_data => {
+                console.log("Data from international db : ", international_data)
+                data_to_decode = international_data[0]
+                console.log("data to decode",data_to_decode)
+                let data = encrypt.getdecodeddata(jsondata.data,data_to_decode.IV,data_to_decode.Key,data_to_decode.tag)
+                
+            res.status(200).json({ data: data, message: "worked" });
+        })
+        } 
+        else 
+        {
+            alert("HTTP-Error: " + response.status);
+        }
+     }
+    catch(error)
+     {
+         console.log(error.message)
+     }
+    
     
 }
