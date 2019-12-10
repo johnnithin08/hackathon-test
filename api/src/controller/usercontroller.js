@@ -132,6 +132,7 @@ exports.local_bank_transfer = async (req,res,next) => {
         transactionID : transactionID,
         branchcode : branchcode,
         GRICcode : GRICcode,
+        status : 'Awaiting Approval',
         amount : amount,
         time : time
     }
@@ -139,7 +140,8 @@ exports.local_bank_transfer = async (req,res,next) => {
         from_GRIC : "IN12345",
         from_branch_code : "12345",
         to_GRIC : "GER678910",
-        to_branch_code : 678910
+        to_branch_code : 678910,
+        sender : 'Local'
     }
     let resp = await encrypt.Postdata(transferdata,identifiers)
     console.log("Usercontroller response : ",resp)
@@ -174,7 +176,7 @@ exports.get_international_bank_transfers = async (req,res,next) => {
 
 
 
-exports.hq_transfer = async(req,res,next) => {
+exports.hq_transfer = async (req,res,next) => {
     try
      {
         let geturl = 'http://sawtooth-client:3000/get_data_from_sawtooth' 
@@ -186,15 +188,23 @@ exports.hq_transfer = async(req,res,next) => {
             let jsondata = await response.json();
             console.log("Data in usercontroller : ",jsondata)
             // console.log(`response -> ${responseJson}`);
-            Decryps.find()
-            .then(international_data => {
-                console.log("Data from international db : ", international_data)
-                data_to_decode = international_data[0]
-                console.log("data to decode",data_to_decode)
-                let data = encrypt.getdecodeddata(jsondata.data,data_to_decode.IV,data_to_decode.Key,data_to_decode.tag)
-                
+            let international_data = await Decryps.find()
+            international_data = international_data[0]
+            console.log("Data from international db : ", international_data)
+            data_to_decode = international_data
+            console.log("data to decode",data_to_decode)
+            let data = encrypt.getdecodeddata(jsondata.data,data_to_decode.IV,data_to_decode.Key,data_to_decode.tag)
+            data.status = "Approved"
+            let identifiers = {
+                from_GRIC : "IN12345",
+                from_branch_code : "12345",
+                to_GRIC : "GER678910",
+                to_branch_code : 678910,
+                sender : 'INternational'
+                }
+            let resp = await encrypt.Postdata(data,identifiers)
+            console.log("Usercontroller response : ",resp)
             res.status(200).json({ data: data, message: "worked" });
-        })
         } 
         else 
         {

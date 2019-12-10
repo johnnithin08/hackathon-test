@@ -39,8 +39,17 @@ exports.Postdata = async (data,identifiers) => {
     let encryp = ciphers[0]
 
     try {
+        let action;
+        if(identifiers.user == 'Local')
+         {
+             action = "data-store-local"
+         }
+        else
+         {
+             action = "data-store-intl"
+         }
         const payload = {
-            action: "data-store",
+            action: action,
             identifiers : identifiers,
             payload: encryp
         }

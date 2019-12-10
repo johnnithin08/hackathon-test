@@ -41,9 +41,22 @@ class BankHandler extends TransactionHandler{
         console.log("parsed msg",msg)
         console.log("msg ---> ",`{ msg:${msg.action}, payload:${msg.payload} }`);
         console.log();
-        if( msg.action === "data-store"){
+        if( msg.action === "data-store-local")
+        {
             try{
-                const local_bank_state = await writeToStore(context, localaddress, msg.payload);
+                const international_bank_state = await writeToStore(context, internationaladdress, msg.payload);
+                // context.addEvent(`${FAMILY_NAME}/stored-data`, [['address', this.address]],"" );
+                return trList;
+            }
+            catch(err){
+                return err;
+            }            
+            
+        }
+        else if( msg.action === "data-store-intl")
+        {
+            try{
+                internationaladdress = hash(FAMILY_NAME).substr(0, 6) + hash(msg.identifiers.to_GRIC).substr(0,20) + hash(msg.identifiers.to_branch_code.toString()).substr(0,20) + hash(stringmsg).substr(0, 24)
                 const international_bank_state = await writeToStore(context, internationaladdress, msg.payload);
                 // context.addEvent(`${FAMILY_NAME}/stored-data`, [['address', this.address]],"" );
                 return trList;
