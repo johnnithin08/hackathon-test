@@ -63,6 +63,20 @@ services:
         - "validator"
         - "sawtooth-TP"
 
+    sawtooth-eventhandle:
+      container_name: sawtooth-eventhandle
+      image: sawtooth-eventhandle
+      build: ./Blockchain/eventHandle
+      ports:
+        - "9001:9000"
+      volumes:
+        - "./Blockchain/eventHandle/src/:/usr/share/workdir/eventHandle/src"
+      command: bash -c "node src/app.js"
+      depends_on:
+        - "sawtooth-rest-api"
+        - "settings-tp"
+        - "validator"
+
 
     #*******************************************Sawtooth*************************************************#
 
