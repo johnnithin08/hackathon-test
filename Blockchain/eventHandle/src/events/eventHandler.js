@@ -4,7 +4,8 @@ const _ = require('lodash');
 const {
   isEventMessage,
   isBlockCommitEvent,
-  isStoreDataEvent
+  isStoreDataEvent,
+  isinternationalBankTransferDone
 } = require('./eventsCheck');
 const {
     Message,
@@ -45,6 +46,12 @@ const eventHandler = (msg) => {
           console.log(' [*]  Data Stored');
           console.log();
           storeDataCallback(event);
+        }
+        if(isinternationalBankTransferDone(event)) {
+          console.log();
+          console.log(' [*]  international bank transfer done');
+          console.log();
+          internationalBankTransferCallback();
         }
       });    
     } 
@@ -96,6 +103,10 @@ const storeDataCallback = (event) => {
 
   socket.emit('dataStored', address);
 
+}
+
+const internationalBankTransferCallback = () => {
+  socket.emit('international-bank-transfer-done', 'done');
 }
 
 

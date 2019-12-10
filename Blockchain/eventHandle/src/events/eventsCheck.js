@@ -13,8 +13,13 @@ const isStoreDataEvent = (event) => {
     return event.eventType === 'sawtooth/state-delta';
 }
 
+const isinternationalBankTransferDone = (event) => {
+    return event.eventType === 'banktransfer/international-bank-transfer-done';
+}
+
 module.exports = {
     isEventMessage,
     isBlockCommitEvent,
-    isStoreDataEvent
+    isStoreDataEvent,
+    isinternationalBankTransferDone
 }

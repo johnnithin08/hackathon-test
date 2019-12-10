@@ -8,7 +8,7 @@ const subsriptions = [
       eventType: 'sawtooth/state-delta'
     }),
     EventSubscription.create({
-      eventType: 'ehrecords/stored-data'
+      eventType: 'banktransfer/international-bank-transfer-done'
     })
 ];
 
