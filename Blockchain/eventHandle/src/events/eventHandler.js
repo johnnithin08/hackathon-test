@@ -51,7 +51,7 @@ const eventHandler = (msg) => {
           console.log();
           console.log(' [*]  international bank transfer done');
           console.log();
-          internationalBankTransferCallback();
+          internationalBankTransferCallback(event);
         }
       });    
     } 
@@ -105,8 +105,19 @@ const storeDataCallback = (event) => {
 
 }
 
-const internationalBankTransferCallback = () => {
-  socket.emit('international-bank-transfer-done', 'done');
+const internationalBankTransferCallback = (event) => {
+  const address = _.chain(event)
+                   .get('attributes')
+                   .map(atr => {
+                     return [atr.key, atr.value]
+                   })
+                   .fromPairs()
+                   .value();
+
+  console.log();
+  console.log(' [*] address --> ', address);
+  console.log();
+  socket.emit('international-bank-transfer-done', address);
 }
 
 

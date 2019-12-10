@@ -1,5 +1,6 @@
 var uuid = require('uuid');
 const fetch = require('node-fetch');
+const { getCallBack } = require('../event/event');
 const { createContext, CryptoFactory } = require('sawtooth-sdk/signing')
 
 
@@ -13,7 +14,11 @@ const localdata = require('../models/Local_Bank_Balances')
 const intldata = require('../models/International_Bank_Balances')
 let currencyexchg = 78.54;
 
+eventCallback = (msg) => { //depreciated
+    console.log('eventCallBack',msg);
+}
 
+getCallBack(eventCallback);
 
 exports.signup = (req,res,next) => {
     console.log("Entered")
