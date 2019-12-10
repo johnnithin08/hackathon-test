@@ -1,8 +1,8 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var socket = io.connect('http://localhost');
-  client.on('blockCommit', (msg) => {console.log(msg)}); //save the msg to var and use it to change UI
-  client.on('dataStored', (msg) => {console.log(msg)});
+  var socket = io("http://localhost");
+  on("international-bank-transfer-done", msg => {
+    console.log(msg); //front-end logic here
+  });
 </script>
-
