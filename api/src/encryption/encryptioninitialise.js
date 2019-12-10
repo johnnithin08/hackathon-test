@@ -10,7 +10,7 @@ const Decryps = require('../models/decrypt')
 
 exports.Postdata = async (data,identifiers) => {
     let enc = new Enc_Dec();
-
+    let status
     const context = createContext('secp256k1')
     let privateKey = context.newRandomPrivateKey().asHex();
     // console.log("type of private key", typeof (signer));
@@ -18,13 +18,23 @@ exports.Postdata = async (data,identifiers) => {
     let stringdata= JSON.stringify(data)
     let cipherData = enc.encrypt(stringdata);
     let ciphers = cipherData.split(":");
+    if(identifiers.sender == 'Local')
+     {
+        status = "Pending"
+     }
+    else
+     {
+        status = "Approved"
+     }
     console.log("Decrypt data stored to db")
+    
     const decryps = new Decryps({
         transactionID : data.transactionID,
         IV: ciphers[1],
         Key: ciphers[2],
         tag: ciphers[3],
-        privk: privateKey
+        privk: privateKey,
+        status : status
     });
     decryps
         .save()
@@ -40,7 +50,7 @@ exports.Postdata = async (data,identifiers) => {
 
     try {
         let action;
-        if(identifiers.user == 'Local')
+        if(identifiers.sender == 'Local')
          {
              action = "data-store-local"
          }

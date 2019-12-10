@@ -3,7 +3,7 @@ version: '2.0'
 services:
     
     api:
-        container_name: api2
+        container_name: api
         image: api
         build: ./api
         restart: always
@@ -26,11 +26,11 @@ services:
             - "27017"
 
     mongo-express:
-        container_name: mongoUI
+        container_name: mongoUI2
         image: mongo-express
         restart: always
         ports:
-          - 8081:8081
+          - 8082:8081
         depends_on: 
           - mongodb
         environment: 

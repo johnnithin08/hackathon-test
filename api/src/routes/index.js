@@ -14,6 +14,14 @@ router.get('/login',(req,res)=>{
     res.render('login.ejs',{});
 })
 
+router.get('/local_branch_fund',usercontroller.get_local_branch_fund)
+
+router.get('/local_bank_fund',usercontroller.get_local_bank_fund)
+
+router.get('/int_branch_fund',usercontroller.get_int_branch_fund)
+
+router.get('/int_bank_fund',usercontroller.get_int_bank_fund)
+
 router.post('/login',usercontroller.login)
 
 router.post('/local_branch_login/transfer_to_local_bank',usercontroller.local_branch_transfer)

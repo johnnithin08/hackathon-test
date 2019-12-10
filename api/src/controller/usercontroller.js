@@ -9,6 +9,9 @@ const Local_Branch_Data = require('../models/Local_Branch')
 const Local_Bank_Data = require('../models/Local_Bank')
 const International_Bank_Data = require('../models/International_Bank')
 const Decryps = require('../models/decrypt')
+const localdata = require('../models/Local_Bank_Balances')
+const intldata = require('../models/International_Bank_Balances')
+let currencyexchg = 78.54;
 
 
 
@@ -48,6 +51,25 @@ exports.signup = (req,res,next) => {
 
 exports.login = (req,res,next) => {
     //res.render('../src/views/login.ejs',{});
+    let initlocaldata = new localdata({
+        accountNo : '123456789',
+        balance : 100000
+    },
+    {
+        accountNo : '12345678910',
+        balance : 1000000000
+    })
+    initlocaldata.save();
+    let initintldata = new intldata({
+        accountNo : '987654321',
+            balance : 5000000000
+        },
+        {
+            accountno : '10987654321',
+            balance : 60000000000
+        
+    })
+    initintldata.save()
     let userID = req.body.userID;
     let password = req.body.password;
     console.log(userID);
@@ -113,6 +135,38 @@ exports.local_branch_transfer = async (req,res,next) => {
 
 }
 
+exports.get_local_branch_fund = (req,res,next) => {
+    localdata.find({ accountNo : '123456789'})
+    .then(data => {
+        console.log("Balance of local branch : ",data)
+        res.status(200).send(data)
+    })
+}
+
+exports.get_local_bank_fund = (req,res,next) => {
+    localdata.find({ accountNo : '12345678910'})
+    .then(data => {
+        console.log("Balance of local bank : ",data)
+        res.status(200).send(data)
+    })
+}
+
+exports.get_int_bank_fund = (req,res,next) => {
+    intldata.find({ accountNo : '987654321'})
+    .then(data => {
+        console.log("Balance of intl bank : ",data)
+        res.status(200).send(data)
+    })
+}
+
+exports.get_int_branch_fund = (req,res,next) => {
+    intl.find({ accountNo : '10987654321'})
+    .then(data => {
+        console.log("Balance of intl branch : ",data)
+        res.status(200).send(data)
+    })
+}
+
 exports.get_local_bank_transfer = (req,res,next) => {
     Local_Bank_Data.find({ "status" : "Submitted"})
     .then(data => {
@@ -120,9 +174,11 @@ exports.get_local_bank_transfer = (req,res,next) => {
         res.status(200).send(data)
     })
 }
+
 exports.local_bank_transfer = async (req,res,next) => {
     let transactionID = req.body.transactionID
-    let amount = req.body.amount;
+    let amountinr = req.body.amount;
+    amount = amountinr/currencyexchg;
     let time = req.body.time;
     let branchcode = req.body.branchcode
     let GRICcode = req.body.GRICcode
@@ -143,6 +199,9 @@ exports.local_bank_transfer = async (req,res,next) => {
         to_branch_code : 678910,
         sender : 'Local'
     }
+    localdata.update({},{ $inc : { balance : -amountinr }},(res) => {
+        console.log("Balance update from local bank and branch : ",res)
+    })
     let resp = await encrypt.Postdata(transferdata,identifiers)
     console.log("Usercontroller response : ",resp)
     Local_Bank_Data.update({transactionID : transactionID},{ $set : { status : 'Forwarded to International Bank'}},(res) => {
@@ -188,19 +247,22 @@ exports.hq_transfer = async (req,res,next) => {
             let jsondata = await response.json();
             console.log("Data in usercontroller : ",jsondata)
             // console.log(`response -> ${responseJson}`);
-            let international_data = await Decryps.find()
+            let international_data = await Decryps.find({ status : 'Pending'})
             international_data = international_data[0]
             console.log("Data from international db : ", international_data)
             data_to_decode = international_data
             console.log("data to decode",data_to_decode)
             let data = encrypt.getdecodeddata(jsondata.data,data_to_decode.IV,data_to_decode.Key,data_to_decode.tag)
             data.status = "Approved"
+            intldata.update({},{ $inc : { balance : +data.amount }},(res) => {
+                console.log("Balance update from international bank and branch : ",res)
+            })
             let identifiers = {
                 from_GRIC : "IN12345",
                 from_branch_code : "12345",
                 to_GRIC : "GER678910",
                 to_branch_code : 678910,
-                sender : 'INternational'
+                sender : 'International'
                 }
             let resp = await encrypt.Postdata(data,identifiers)
             console.log("Usercontroller response : ",resp)

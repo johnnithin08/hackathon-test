@@ -5,6 +5,10 @@ const DecSchema = mongoose.Schema({
         type : String,
         required : true
     },
+    status : {
+        type : String,
+        required : true
+    },
     IV: {
         type:String,
         required:true
