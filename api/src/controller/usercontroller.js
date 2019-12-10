@@ -150,6 +150,7 @@ exports.local_bank_transfer = async (req,res,next) => {
     let localbanktransactiondata = new International_Bank_Data({
         ReconcileID : reconcileID,
         transactionID : transactionID,
+        status : "Submitted",
         branchcode : branchcode,
         amount : amount,
         time : time
@@ -163,15 +164,30 @@ exports.local_bank_transfer = async (req,res,next) => {
     
 }
 
-exports.get_international_bank_transfer = async (req,res,next) => {
+exports.get_international_bank_transfers = async (req,res,next) => {
+    International_Bank_Data.find({ "status" : "Submitted"})
+    .then(data => {
+        console.log("data : " , data)
+        res.status(200).send(data)
+    })
+}
+
+
+
+exports.hq_transfer = async(req,res,next) => {
     let geturl = 'http://sawtooth-client:3000/get_data_from_sawtooth' 
     let response = await fetch(geturl, {
         method: 'GET',
     })
+    console.log("Data in usercontroller : ",res)
     let responseJson = await response.json();
     console.log(`response -> ${responseJson}`);
-
-    let dec = new Enc_Dec();
-    let data = dec.decrypt(responseJson.data, doc.IV, doc.Key, doc.tag)
-    res.status(200).json({ data: data, message: "worked" });
+    Decryps.find()
+    .then(international_data => {
+        console.log("Data from international db : ", data)
+        let dec = new Enc_Dec();
+        let data = dec.decrypt(response.data,international_data.iv,international_data.key,international_data.tag)
+        res.status(200).json({ data: data, message: "worked" });
+    })
+    
 }

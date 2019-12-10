@@ -22,7 +22,9 @@ router.get('/login/local_bank_transfers',usercontroller.get_local_bank_transfer)
 
 router.post('/login/transfer_to_international_bank',usercontroller.local_bank_transfer)
 
-router.get('/login/international_bank_transfers',usercontroller.get_international_bank_transfer)
+router.get('/login/international_bank_transfers',usercontroller.get_international_bank_transfers)
+
+router.post('/login/hq_transfer',usercontroller.hq_transfer)
 
 router.post('/decoder',encrypt.getDataById)
 
